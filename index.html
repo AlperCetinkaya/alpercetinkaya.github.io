@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alper Çetinkaya // Developer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --mouse-x: 50%;
+      --mouse-y: 50%;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #e0ffe0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+    }
+
+    /* Matrix canvas arkası */
+    #matrixCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: #000;
+      display: block;
+    }
+
+    /* Mous efekti */
+    .mouse-wave {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+
+      background:
+        radial-gradient(
+          circle at var(--mouse-x) var(--mouse-y),
+          rgba(255, 0, 170, 0.151) 0%,
+          rgba(0, 40, 0, 0.10) 20%,
+          rgba(0, 0, 0, 0.75) 55%,
+          rgba(0, 0, 0, 1) 100%
+        );
+      mix-blend-mode: soft-light;
+      transition: background 0.08s linear;
+    }
+
+    /* Ana içerik */
+    .content {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      max-width: 640px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 2.5rem 2.75rem;
+      border: 1px solid rgba(0, 255, 128, 0.3);
+      background: radial-gradient(circle at 10% -30%, rgba(0, 255, 128, 0.08), transparent 55%),
+                  radial-gradient(circle at 90% 130%, rgba(0, 128, 255, 0.15), transparent 60%),
+                  rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      box-shadow:
+        0 0 25px rgba(0, 255, 128, 0.3),
+        0 0 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9be7ff;
+      opacity: 0.9;
+    }
+
+    .status-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 128, 0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #00ff99;
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    .name {
+      font-size: clamp(1.8rem, 3vw, 2.2rem);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .role {
+      font-size: 0.95rem;
+      color: #b0ffcf;
+      opacity: 0.85;
+    }
+
+    .divider {
+      height: 1px;
+      border: 0;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 255, 128, 0.5),
+        transparent
+      );
+      margin: 1.75rem 0 1.25rem;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #d9ffe8;
+      margin-bottom: 1.5rem;
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stack span {
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 128, 0.3);
+      font-size: 0.75rem;
+      color: #baffd4;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .footnote {
+      font-size: 0.78rem;
+      color: #a0ffc0;
+      opacity: 0.8;
+    }
+
+    .blink {
+      animation: blink 1.2s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to {
+        visibility: hidden;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 1.8rem 1.6rem;
+      }
+
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrixCanvas"></canvas>
+  <div class="mouse-wave"></div>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="badge">// personal.dev</div>
+          <h1 class="name">Alper Çetinkaya</h1>
+          <div class="role">.NET / C# Developer</div>
+        </div>
+        <div class="status-pill">
+          in progress<span class="blink">_</span>
+        </div>
+      </div>
+
+      <p class="description">
+        Coming soon..
+      </p>
+
+      <hr class="divider" />
+
+      <div class="stack">
+        <span>C#</span>
+        <span>.NET</span>
+        <span>ASP.NET Core</span>
+        <span>HTML</span>
+        <span>CSS</span>
+      </div>
+
+      <div class="footnote">
+        > <span class="blink">|</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // MATRIX
+    // =========================
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 1:1 çizim için
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Kod karakter seti 
+    const codeFragments = [
+      "if (isValid)", "else", "foreach (var x in items)",
+      "public class Developer", "Task<IActionResult>", "async await",
+      "return Ok();", "<div>", "</div>", "<section>", "</section>",
+      ".container {", "display: flex;", "justify-content: center;",
+      "align-items: center;", "background: #000;", "color: #0f0;",
+      "interface IRepository<T>", "using System;", "namespace MatrixLab",
+      "Console.WriteLine();", "HttpGet(\"/api\")", "var result =",
+      "try {", "} catch (Exception ex)", ".Where(x => x.Active)",
+      "flex-direction: column;", ":root { --accent: #0f0; }"
+    ];
+
+    const fontSize = 18;
+    let columns = Math.floor(window.innerWidth / fontSize);
+    let drops = [];
+
+    function initDrops() {
+      columns = Math.floor(window.innerWidth / fontSize);
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * -50); // Yukarıdan başlasın
+      }
+    }
+
+    initDrops();
+    window.addEventListener("resize", initDrops);
+
+    function drawMatrix() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Hafif karartma, kuyruk efekti
+      ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = "#ffffff"; //"#00ff99";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const fragment =
+          codeFragments[Math.floor(Math.random() * codeFragments.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(fragment, x, y);
+
+        // Aşağı kaydır
+        //drops[i]++;
+        drops[i] += 0.3;
+
+        // Ekran dışına çıktığında bazen yeniden yukarı taşı
+        if (y > h && Math.random() > 0.975) {
+          drops[i] = Math.floor(Math.random() * -40);
+        }
+      }
+
+      requestAnimationFrame(drawMatrix);
+    }
+
+    requestAnimationFrame(drawMatrix);
+
+    // =========================
+    // MOUSE DALGA / ÇUKUR EFEKTİ
+    // =========================
+    const wave = document.querySelector(".mouse-wave");
+    let lastX = window.innerWidth / 2;
+    let lastY = window.innerHeight / 2;
+    let ticking = false;
+
+    function updateWavePosition(x, y) {
+      // CSS değişkenlerini yüzde cinsinden veriyoruz
+      const percentX = (x / window.innerWidth) * 100;
+      const percentY = (y / window.innerHeight) * 100;
+
+      document.documentElement.style.setProperty("--mouse-x", percentX + "%");
+      document.documentElement.style.setProperty("--mouse-y", percentY + "%");
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateWavePosition(lastX, lastY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // nefes alma efekti
+    let pulse = 0;
+    setInterval(() => {
+      pulse = (pulse + 1) % 1000;
+      
+    }, 80);
+  </script>
+</body>
+</html>
