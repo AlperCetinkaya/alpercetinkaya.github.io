@@ -13,7 +13,7 @@ $('clear').onclick=()=>{$('a').value=$('b').value='';delete $('nameA').dataset.f
 function navigate(step){let list=blocks();if(!list.length)return;current=current<0?(step<0?list.length-1:0):(current+step+list.length)%list.length;document.querySelectorAll('.active').forEach(el=>el.classList.remove('active'));const target=document.querySelector('[data-i="'+list[current]+'"]');if(target){target.classList.add('active');$('diff').scrollTop=target.offsetTop-$('diff').offsetTop;$('position').textContent=(current+1)+' / '+list.length;}}
 $('prev').onclick=()=>navigate(-1);$('next').onclick=()=>navigate(1);
 $('demo').onclick=()=>{$('a').value='const settings = {\n  appName: "Diffora",\n  version: "1.0.0",\n  theme: "light",\n  autoSave: false,\n};\n\nfunction welcome(name) {\n  return "Merhaba " + name;\n}\n\nexport default settings;';$('b').value='const settings = {\n  appName: "Diffora",\n  version: "2.0.0",\n  theme: "dark",\n  autoSave: true,\n  language: "tr",\n};\n\nfunction welcome(name) {\n  return `Merhaba ${name}!`;\n}\n\nexport default settings;';$('nameA').dataset.filename='settings.old.js';$('nameB').dataset.filename='settings.new.js';$('nameA').textContent='settings.old.js';$('nameB').textContent='settings.new.js';counts();compare();};
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();compare()}});
+document.addEventListener('keydown',e=>{if(!$('compare-panel')?.hidden&&(e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();compare()}});
 
 function refreshLanguage(){
  applyLanguage();
@@ -27,4 +27,5 @@ function refreshLanguage(){
 }
 $('language').addEventListener('change',e=>{language=e.target.value;try{localStorage.setItem('satir-language',language)}catch{}refreshLanguage()});
 refreshLanguage();
+
 

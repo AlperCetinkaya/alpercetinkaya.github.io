@@ -5,8 +5,9 @@ function t(key){return translations[language][key]??key;}
 const textBindings=[],attributeBindings=[];
 const dynamicIds=new Set(['nameA','nameB','countA','countB','titleA','titleB','stats','status','diff']);
 const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-while(walker.nextNode()){const node=walker.currentNode, parent=node.parentElement;if(parent.closest('script,style,select')||parent.closest('[id]')&&dynamicIds.has(parent.closest('[id]').id))continue;const key=node.textContent.trim();if(translations.tr[key]&&!(parent.classList.contains('brand')&&key==='satır'))textBindings.push({node,key,prefix:node.textContent.match(/^\s*/)[0],suffix:node.textContent.match(/\s*$/)[0]});}
+while(walker.nextNode()){const node=walker.currentNode, parent=node.parentElement;if(parent.closest('script,style,select,[data-v],#viewer-panel')||parent.closest('[id]')&&dynamicIds.has(parent.closest('[id]').id))continue;const key=node.textContent.trim();if(translations.tr[key]&&!(parent.classList.contains('brand')&&key==='satır'))textBindings.push({node,key,prefix:node.textContent.match(/^\s*/)[0],suffix:node.textContent.match(/\s*$/)[0]});}
 for(const node of document.querySelectorAll('[aria-label],[placeholder]'))for(const attr of ['aria-label','placeholder']){const key=node.getAttribute(attr);if(translations.tr[key])attributeBindings.push({node,attr,key});}
 function applyLanguage(){document.documentElement.lang=language;document.title=t('Diffora · Dosya karşılaştırma');for(const b of textBindings)b.node.textContent=b.prefix+t(b.key)+b.suffix;for(const b of attributeBindings)b.node.setAttribute(b.attr,t(b.key));document.getElementById('language').value=language;document.getElementById('language').setAttribute('aria-label',({tr:'Arayüz dili',en:'Interface language',de:'Sprache der Oberfläche'})[language]);}
 applyLanguage();
+
 
