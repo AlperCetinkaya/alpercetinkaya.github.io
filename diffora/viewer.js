@@ -11,34 +11,7 @@ const output=()=>result?(minified?result.compact:result.pretty):'';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function message(){by('v-status').textContent=result?w('valid')+' '+result.format.toUpperCase()+' · '+output().split('\n').length+' '+w('line').toLowerCase():w(statusKey);by('v-status').classList.toggle('v-valid',!!result);by('v-meta').textContent=(sourceName?sourceName+' · ':'')+by('v-source').value.length.toLocaleString()+' '+w('chars');by('v-notice').textContent=noticeKey?w(noticeKey):treeLimited?w('limited'):'';by('v-error').textContent=lastError?w(lastError.message)+(lastError.line?' · '+w('line')+' '+lastError.line+(lastError.column?', '+w('column')+' '+lastError.column:''):''):'';}
 function languageUI(){document.querySelectorAll('[data-v]').forEach(el=>el.textContent=w(el.dataset.v));by('v-source').placeholder=w('placeholder');by('v-source').setAttribute('aria-label',w('source'));by('v-search').placeholder=w('search');by('v-search').setAttribute('aria-label',w('search'));by('v-prev').setAttribute('aria-label',w('previous'));by('v-next').setAttribute('aria-label',w('next'));by('v-file').setAttribute('aria-label',w('file'));by('v-format').setAttribute('aria-label','JSON / XML');by('v-indent').setAttribute('aria-label',w('indent'));by('v-indent').options[0].textContent='2 '+w('spaces');by('v-indent').options[1].textContent='4 '+w('spaces');by('v-inner-hint').textContent=w('innerHint');message();if(!result)by('v-empty').textContent=w('ready');by('tool-navigation').setAttribute('aria-label',w('tools'));setTitle();}
-function setTitle(){document.title='Diffora · '+(!by('viewer-panel').hidden?'JSON / XML Viewer':w('compare'))+' — Developer Toolkit';}
-// Static entry pages share a base URL; navigation keeps both tools mounted.
-const toolkitBase=new URL('.',document.baseURI);
-const toolURL=tool=>new URL(tool+'/',toolkitBase);
-document.querySelector('header .brand').href=toolkitBase.href;
-for(const [id,tool] of [['tab-compare','compare'],['tab-viewer','viewer']])by(id).href=toolURL(tool).href;
-function selectTab(viewer){
- by('viewer-panel').hidden=!viewer;by('compare-panel').hidden=viewer;
- for(const [id,selected] of [['tab-compare',!viewer],['tab-viewer',viewer]]){
-  if(selected)by(id).setAttribute('aria-current','page');else by(id).removeAttribute('aria-current');
- }
- setTitle();
- by('tool-navigation').setAttribute('aria-label',w('tools'));
-}
-function routeFromLocation(){
- const viewer=location.hash==='#viewer'||(location.hash!=='#compare'&&/\/viewer(?:\/|\/index\.html)?$/.test(location.pathname));
- selectTab(viewer);
- const url=toolURL(viewer?'viewer':'compare');
- if(location.pathname!==url.pathname||location.hash)history.replaceState(null,'',url.pathname+location.search);
-}
-for(const [id,viewer] of [['tab-compare',false],['tab-viewer',true]])by(id).onclick=e=>{
- if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
- e.preventDefault();const url=toolURL(viewer?'viewer':'compare');
- if(location.pathname!==url.pathname)history.pushState(null,'',url.pathname+location.search);
- selectTab(viewer);
-};
-window.addEventListener('popstate',routeFromLocation);
-window.addEventListener('hashchange',routeFromLocation);
+function setTitle(){window.DifforaToolkit?.refresh();}
 
 function controls(){for(const id of ['v-tree-tab','v-code-tab','v-expand','v-collapse','v-copy','v-download','v-compact','v-pretty','v-search'])by(id).disabled=!result;by('v-jump').hidden=!lastError?.line;by('v-inner-wrap').hidden=!result?.inner;by('v-empty').hidden=!!result;by('v-tree').hidden=!result||view!=='tree';by('v-code').hidden=!result||view!=='code';by('v-tree-tab').setAttribute('aria-pressed',String(view==='tree'));by('v-code-tab').setAttribute('aria-pressed',String(view==='code'));by('v-expand').disabled=by('v-collapse').disabled=!result||view!=='tree';by('v-compact').setAttribute('aria-pressed',String(minified));by('v-pretty').setAttribute('aria-pressed',String(!minified));}
 function resetOutput(){result=null;lastError=null;noticeKey='';treeLimited=false;by('v-tree').replaceChildren();by('v-code').replaceChildren();matches=[];matchIndex=-1;by('v-match-count').textContent='0 / 0';by('v-prev').disabled=by('v-next').disabled=true;controls();}
@@ -64,6 +37,6 @@ async function load(file){if(!file)return;try{if(file.size>2*1024*1024)throw new
 by('v-file').onchange=e=>load(e.target.files[0]);by('v-source').ondragover=e=>e.preventDefault();by('v-source').ondrop=e=>{e.preventDefault();load(e.dataTransfer.files[0]);};
 by('v-sample').onclick=()=>{sourceName='';by('v-source').value=by('v-format').value==='xml'?'<?xml version="1.0" encoding="UTF-8"?><response><status code="200">OK</status><user id="42"><name>Alper</name><roles><role>developer</role><role>reviewer</role></roles></user></response>':'{"status":"ok","user":{"id":42,"name":"Alper","active":true,"roles":["developer","reviewer"]},"meta":{"count":2,"next":null}}';inspect();};
 by('language').addEventListener('change',()=>{languageUI();if(result){renderTree();search();}});
-languageUI();controls();routeFromLocation();
+languageUI();controls();
 })();
 
