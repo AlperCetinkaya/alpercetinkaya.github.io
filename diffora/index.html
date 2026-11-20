@@ -1,18 +1,23 @@
 <!doctype html>
-<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Diffora · Dosya karşılaştırma</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="viewer.css?v=20261120"></head><body>
-<header><a class="brand" href="./"><span class="logo">≋</span> Diffora<span class="tag">DIFF ATÖLYESİ</span></a><div class="header-tools"><select id="language" aria-label="Arayüz dili"><option value="tr">Türkçe</option><option value="en">English</option><option value="de">Deutsch</option></select><span class="privacy"><i></i> Dosyalarınız tarayıcınızda kalır</span></div></header>
-<main>
-<nav class="tool-tabs" role="tablist" aria-label="Diffora tools">
-<button id="tab-compare" type="button" role="tab" aria-selected="true" aria-controls="compare-panel" data-v="compare">Karşılaştırma</button>
-<button id="tab-viewer" type="button" role="tab" aria-selected="false" aria-controls="viewer-panel" tabindex="-1">JSON / XML Viewer</button>
+<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Diffora — Developer Toolkit</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="viewer.css?v=20261120"><link rel="stylesheet" href="toolkit.css?v=20261120-toolkit"></head><body>
+<header><a class="brand" href="./"><span class="logo">≋</span> Diffora<span class="tag">DEVELOPER TOOLKIT</span></a><div class="header-tools"><select id="language" aria-label="Arayüz dili"><option value="tr">Türkçe</option><option value="en">English</option><option value="de">Deutsch</option></select><span class="privacy"><i></i> Dosyalarınız tarayıcınızda kalır</span></div></header>
+<div class="toolkit-shell">
+<aside class="tool-sidebar">
+<div class="sidebar-heading" data-v="tools">ARAÇLAR</div>
+<nav id="tool-navigation" class="tool-navigation" aria-label="Araçlar">
+<a id="tab-compare" href="compare/" aria-current="page" aria-controls="compare-panel"><span class="tool-symbol" aria-hidden="true">≋</span><span class="tool-label"><strong data-v="compare">Karşılaştırma</strong><span class="tool-description" data-v="compareHint" aria-hidden="true">İki dosya, yan yana</span></span></a>
+<a id="tab-viewer" href="viewer/" aria-controls="viewer-panel"><span class="tool-symbol" aria-hidden="true">{ }</span><span class="tool-label"><strong>JSON / XML Viewer</strong><span class="tool-description" data-v="viewerHint" aria-hidden="true">Formatla, doğrula, incele</span></span></a>
 </nav>
-<section id="compare-panel" role="tabpanel" aria-labelledby="tab-compare"><div class="intro"><div><div class="eyebrow">İKİ DOSYA. TEK BAKIŞ.</div><h1>Her değişiklik, <em>yerli yerinde.</em></h1><p>Eski ve yeni halini yan yana inceleyin. Aynı satırlar yeşil, farklar kırmızı.</p></div><button id="demo" class="quiet">↗ Örneği dene</button></div>
+<div class="sidebar-note"><span class="sidebar-note-label">DIFFORA</span><p data-v="toolkitHint">Günlük geliştirme araçların, tek bir yerde.</p></div>
+</aside>
+<main id="tool-workspace">
+<section id="compare-panel" role="region" aria-labelledby="tab-compare"><div class="intro"><div><div class="eyebrow">İKİ DOSYA. TEK BAKIŞ.</div><h1>Her değişiklik, <em>yerli yerinde.</em></h1><p>Eski ve yeni halini yan yana inceleyin. Aynı satırlar yeşil, farklar kırmızı.</p></div><button id="demo" class="quiet">↗ Örneği dene</button></div>
 <section class="inputs"><article><div class="panel-head"><span><b class="badge">A</b> İlk hali <small id="nameA">Orijinal dosya</small></span><label class="upload">↑ Dosya seç<input id="fileA" type="file" aria-label="İlk dosyayı seç"></label></div><textarea id="a" spellcheck="false" aria-label="İlk dosya içeriği" placeholder="İlk dosyayı buraya bırakın veya içeriğini yapıştırın…"></textarea><div class="input-foot"><span id="countA">0 satır</span><span>Metin ve kod dosyaları</span></div></article><article><div class="panel-head"><span><b class="badge">B</b> Son hali <small id="nameB">Güncellenmiş dosya</small></span><label class="upload">↑ Dosya seç<input id="fileB" type="file" aria-label="Son dosyayı seç"></label></div><textarea id="b" spellcheck="false" aria-label="Son dosya içeriği" placeholder="Son dosyayı buraya bırakın veya içeriğini yapıştırın…"></textarea><div class="input-foot"><span id="countB">0 satır</span><span>UTF-8 metin</span></div></article></section>
 <div class="actions"><div><button id="swap" class="quiet">⇄ Yer değiştir</button><button id="clear" class="quiet">Temizle</button></div><div><label class="check"><input type="checkbox" id="spaces"> Boşluk farklarını yok say</label><button class="primary" id="compare">Dosyaları karşılaştır <span>→</span></button></div></div>
 <p id="error" role="alert"></p>
 <section class="result"><div class="result-head"><div><h2>Karşılaştırma</h2><span id="status" aria-live="polite">Dosyalarınızı ekleyerek başlayın</span></div><div class="legend"><span class="green-dot">Aynı</span><span class="red-dot">Farklı</span></div></div><div class="result-tools"><div id="stats">Henüz karşılaştırma yok</div><div><label class="check"><input type="checkbox" id="only"> Yalnızca farklar</label><button class="icon" id="prev" aria-label="Önceki fark">↑</button><span id="position">0 / 0</span><button class="icon" id="next" aria-label="Sonraki fark">↓</button></div></div><div class="col-head"><span>A <b id="titleA">İlk hali</b></span><span>B <b id="titleB">Son hali</b></span></div><div id="diff" tabindex="0" aria-label="Yan yana karşılaştırma"><div class="empty"><span>⟷</span><h3>Farkları görmeye hazır mısınız?</h3><p>İki metin ekleyin, gerisini Diffora'a bırakın.</p></div></div></section>
 </section>
-<section id="viewer-panel" role="tabpanel" aria-labelledby="tab-viewer" hidden>
+<section id="viewer-panel" role="region" aria-labelledby="tab-viewer" hidden>
 <div class="intro v-intro"><div><div class="eyebrow" data-v="subtitle">SERVİS VERİSİNE YAKINDAN BAK.</div><h1 data-v="heading">Verinin içini aç.</h1><p data-v="intro">JSON veya XML içeriğini formatla, doğrula ve yapısını incele.</p></div><button id="v-sample" type="button" class="quiet" data-v="sample">Örneği dene</button></div>
 <div class="v-workspace">
 <article class="v-input-panel"><div class="panel-head"><strong data-v="source">Kaynak içerik</strong><label class="upload"><span data-v="file">Dosya seç</span><input id="v-file" type="file" accept=".json,.xml,.txt,.log,application/json,application/xml,text/*" aria-label="Dosya seç"></label></div>
@@ -33,5 +38,6 @@
 </section>
 </div>
 </section>
-<footer><span>DIFFORA <span class="muted">/ Küçük farklar, net bir görünüm.</span></span><span>Yerel işlem · Sunucuya dosya yüklenmez</span></footer></main><script src="viewer-core.js?v=20261120"></script><script src="diff.js"></script><script src="i18n.js?v=20261120"></script><script src="app.js?v=20261120"></script><script src="viewer.js?v=20261120"></script></body></html>
+<footer><span>DIFFORA <span class="muted">/ Küçük farklar, net bir görünüm.</span></span><span>Yerel işlem · Sunucuya dosya yüklenmez</span></footer></main></div><script src="viewer-core.js?v=20261120"></script><script src="diff.js"></script><script src="i18n.js?v=20261120"></script><script src="app.js?v=20261120"></script><script src="viewer.js?v=20261120-toolkit"></script></body></html>
+
 
