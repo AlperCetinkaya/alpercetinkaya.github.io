@@ -33,7 +33,7 @@ function merge(a,b){
  }
  return a;
 }
-function generate(source,{className='Root',namespace='Diffora.Models',inferDates=false}={}){
+function generate(source,{className='Root',namespace='Diffora.Models',inferDates=false,attributes=true}={}){
  if(typeof source!=='string'||new TextEncoder().encode(source).length>MAX_BYTES)fail('size');if(typeof className!=='string'||className.length>80||!validName(className))fail('className');if(typeof namespace!=='string'||namespace.length>200||(namespace&&!namespace.split('.').every(validName)))fail('namespace');if(!namespace&&className==='System')fail('className');
  const warnings=[],seen=new Set(),counts=new Map();const warn=(code,path)=>{const key=code+':'+path;if(!seen.has(key)&&(counts.get(code)||0)<3){warnings.push({code,path:path.slice(0,200)});seen.add(key);counts.set(code,(counts.get(code)||0)+1);}};
  const tree=parse(source.replace(/^\uFEFF/,''));
@@ -57,7 +57,7 @@ function generate(source,{className='Root',namespace='Diffora.Models',inferDates
  }
  const elementType=emit(schema,className,'$',true),rootType=arrayRoot?'global::System.Collections.Generic.List<'+elementType+'>':elementType;
  let code='#nullable enable\n\n';if(namespace)code+='namespace '+namespace+';\n\n';code+='// Inferred from sample JSON. Review types against your API contract.\n// Root JSON type: '+rootType+'\n\n';
- for(const cls of classes){code+='public sealed class '+cls.name+'\n{\n';for(const p of cls.properties)code+='    [global::System.Text.Json.Serialization.JsonPropertyName('+literal(p.key)+')]\n    public '+p.type+' '+p.prop+' { get; set; }'+p.init+'\n\n';code=code.trimEnd()+'\n}\n\n';if(code.length>500000)fail('complexity');}
+ for(const cls of classes){code+='public sealed class '+cls.name+'\n{\n';for(const p of cls.properties)code+=(attributes?'    [global::System.Text.Json.Serialization.JsonPropertyName('+literal(p.key)+')]\n':'')+'    public '+p.type+' '+p.prop+' { get; set; }'+p.init+'\n\n';code=code.trimEnd()+'\n}\n\n';if(code.length>500000)fail('complexity');}
  return {code:code.trimEnd()+'\n',rootType,warnings,classes:classes.length,className};
 }
 const api={generate,ModelError,MAX_BYTES};root.DifforaCSharp=api;if(typeof module!=='undefined')module.exports=api;
